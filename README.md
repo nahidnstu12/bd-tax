@@ -3,7 +3,8 @@
 Personal tax-filing assistant for Bangladesh individual taxpayers. Local only.
 Built as a production-shaped learning project for RAG / AI engineering.
 
-**Design docs:** [`docs/planning-and-architecture.md`](docs/planning-and-architecture.md)
+**Docs:** [index](docs/README.md) · [setup & usage](docs/setup-guide.md) ·
+[architecture](docs/planning-and-architecture.md) · [build phases](docs/phases/00-overview.md)
 
 ---
 
@@ -22,14 +23,14 @@ tax computation still works. That is the test of whether the layering is right.
 
 ## Status
 
-| Phase | | |
+| Phase | | Guide |
 |---|---|---|
-| 1 | Calculator + replay eval | **scaffolded — awaiting real return data** |
-| 2 | Curate rules corpus | not started |
-| 3 | Index → pgvector → search | not started |
-| 4 | Ask tab (RAG + citations) | not started |
-| 5 | Calculate tab + narration | not started |
-| 6 | Year selector, config diff | not started |
+| 1 | Calculator + replay eval | **scaffolded — awaiting real return data** · [doc](docs/phases/01-calculator.md) |
+| 2 | Curate rules corpus | not started · [doc](docs/phases/02-corpus.md) |
+| 3 | Index → pgvector → search | not started · [doc](docs/phases/03-indexing.md) |
+| 4 | Ask tab (RAG + citations) | not started · [doc](docs/phases/04-ask-tab.md) |
+| 5 | Calculate tab + narration | not started · [doc](docs/phases/05-calculate-tab.md) |
+| 6 | Measurement, year tooling | not started · [doc](docs/phases/06-polish.md) |
 
 **All rule figures are currently UNVERIFIED** (`"verified": false` in each config).
 They came from commentary blogs, not the Finance Act — see
