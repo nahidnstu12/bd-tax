@@ -1,0 +1,79 @@
+{
+  "assessment_year": "2026-27",
+  "income_year": { "from": "2025-07-01", "to": "2026-06-30" },
+  "filing_deadline": "2026-11-30",
+
+  "verified": false,
+  "source": "UNVERIFIED — rashelslawdesk.com + hsa.com.bd, captured 2026-07-29. See docs/research/sources-2026-07-29.md",
+
+  "_verify": [
+    "V1 rebate base: 'taxable income' per these sources vs 'total income' in the 2025-26 source",
+    "V2 minimum tax trigger wording",
+    "V3 per-category thresholds — sources group disability/third gender/freedom fighter as 'up to 525,000'; the split below is ASSUMED from the 2025-26 structure",
+    "V4 whether HRA / medical exemption rules carried into 2026-27 — NOT captured for this year",
+    "V5 whether the parent-of-disabled extra still applies",
+    "V6 surcharge on net worth — absent from all sources; abolished or unreported?"
+  ],
+
+  "exempt_threshold": {
+    "general": 400000,
+    "female_or_senior_65_plus": 425000,
+    "person_with_disability": 525000,
+    "third_gender": 525000,
+    "gazetted_freedom_fighter": 525000
+  },
+
+  "parent_of_disabled_extra": 50000,
+
+  "_bands_note": "Widths apply ABOVE the exempt threshold, in order. width: null = remainder. Unchanged from 2025-26.",
+  "bands": [
+    { "width": 300000, "rate": 0.10 },
+    { "width": 400000, "rate": 0.15 },
+    { "width": 500000, "rate": 0.20 },
+    { "width": 2000000, "rate": 0.25 },
+    { "width": null, "rate": 0.30 }
+  ],
+
+  "rebate": {
+    "_rule": "rebate = lowest of (pct_of_taxable_income x total income), (pct_of_investment x eligible investment), absolute_cap",
+    "_changed": "pct_of_investment 0.15 -> 0.10 and absolute_cap 1000000 -> 750000 vs AY 2025-26",
+    "pct_of_taxable_income": 0.03,
+    "pct_of_investment": 0.1,
+    "absolute_cap": 750000,
+    "eligible_categories": [
+      "Life Insurance Premium",
+      "Deposit Pension Scheme (DPS)",
+      "Approved Sanchayapatra",
+      "Unit Certificate / Mutual Fund / ETF / Joint Investment Scheme",
+      "Listed Stocks or Shares",
+      "General Provident Fund (GPF)",
+      "Recognized Provident Fund (RPF)",
+      "Approved Superannuation Fund",
+      "Approved Benevolent Fund & Group Insurance Premium",
+      "Zakat Fund (Zakat Fund Management Act 2023)",
+      "Universal Pension Scheme",
+      "Others"
+    ]
+  },
+
+  "minimum_tax": {
+    "standard": 5000,
+    "first_time_filer": 1000,
+    "_applies_when_options": ["total_income_above_threshold", "always"],
+    "applies_when": "total_income_above_threshold"
+  },
+
+  "salary_exemption": {
+    "_note": "COPIED FORWARD from AY 2025-26 — no source confirms these rules for 2026-27. See V4.",
+    "_mode_options": ["itemized", "overall_cap"],
+    "mode": "itemized",
+    "house_rent_pct_of_basic": 0.5,
+    "medical_annual_cap": 120000,
+    "conveyance_annual_cap": null,
+    "overall_cap": null
+  },
+
+  "house_property": {
+    "repair_allowance_pct": null
+  }
+}

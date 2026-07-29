@@ -1,0 +1,77 @@
+{
+  "assessment_year": "2025-26",
+  "income_year": { "from": "2024-07-01", "to": "2025-06-30" },
+
+  "verified": false,
+  "source": "UNVERIFIED — bdtaxguide.com, captured 2026-07-29. See docs/research/sources-2026-07-29.md",
+  "_income_year_source": "CONFIRMED — NBR e-Return User Manual v1.1_25, Assessment screen shows 01-07-2024 to 30-06-2025",
+
+  "_verify": [
+    "V1 rebate base: source says '3% of total income'; other sources say 'taxable income'",
+    "V2 minimum tax trigger: floor-when-lower vs applies-above-threshold",
+    "V4 salary exemption: itemised HRA/medical vs an overall cap (one-third / absolute) — unconfirmed",
+    "House property repair allowance percentage — no source found; net income is taken as input"
+  ],
+
+  "exempt_threshold": {
+    "general": 375000,
+    "female_or_senior_65_plus": 425000,
+    "person_with_disability": 500000,
+    "third_gender": 500000,
+    "gazetted_freedom_fighter": 525000
+  },
+
+  "parent_of_disabled_extra": 50000,
+
+  "_bands_note": "Widths apply ABOVE the exempt threshold, in order. width: null = remainder.",
+  "bands": [
+    { "width": 300000, "rate": 0.10 },
+    { "width": 400000, "rate": 0.15 },
+    { "width": 500000, "rate": 0.20 },
+    { "width": 2000000, "rate": 0.25 },
+    { "width": null, "rate": 0.30 }
+  ],
+
+  "rebate": {
+    "_rule": "rebate = lowest of (pct_of_taxable_income x total income), (pct_of_investment x eligible investment), absolute_cap",
+    "pct_of_taxable_income": 0.03,
+    "pct_of_investment": 0.15,
+    "absolute_cap": 1000000,
+    "_eligible_categories_source": "NBR e-Return User Manual v1.1_25, Rebate tab",
+    "eligible_categories": [
+      "Life Insurance Premium",
+      "Deposit Pension Scheme (DPS)",
+      "Approved Sanchayapatra",
+      "Unit Certificate / Mutual Fund / ETF / Joint Investment Scheme",
+      "Listed Stocks or Shares",
+      "General Provident Fund (GPF)",
+      "Recognized Provident Fund (RPF)",
+      "Approved Superannuation Fund",
+      "Approved Benevolent Fund & Group Insurance Premium",
+      "Zakat Fund (Zakat Fund Management Act 2023)",
+      "Universal Pension Scheme",
+      "Others"
+    ]
+  },
+
+  "minimum_tax": {
+    "standard": 5000,
+    "first_time_filer": 1000,
+    "_applies_when_options": ["total_income_above_threshold", "always"],
+    "applies_when": "total_income_above_threshold"
+  },
+
+  "salary_exemption": {
+    "_mode_options": ["itemized", "overall_cap"],
+    "mode": "itemized",
+    "house_rent_pct_of_basic": 0.5,
+    "medical_annual_cap": 120000,
+    "conveyance_annual_cap": null,
+    "overall_cap": null
+  },
+
+  "house_property": {
+    "_note": "No repair-allowance percentage found in any source. Until verified, supply NET house property income as input.",
+    "repair_allowance_pct": null
+  }
+}

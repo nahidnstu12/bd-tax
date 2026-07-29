@@ -1,0 +1,17 @@
+node_modules/
+.next/
+dist/
+
+# Personal tax data — NEVER commit, NEVER embed, NEVER send to a hosted model.
+private/
+!private/returns/
+private/returns/*
+!private/returns/*.example.json
+
+.env
+.env.local
+
+# Large source PDFs (keep the derived .md, not the binary)
+docs/research/*.pdf
+
+.DS_Store
