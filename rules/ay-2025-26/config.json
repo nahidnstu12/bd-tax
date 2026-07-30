@@ -9,9 +9,18 @@
   "_verify": [
     "V1 rebate base: source says '3% of total income'; other sources say 'taxable income'",
     "V2 minimum tax trigger: floor-when-lower vs applies-above-threshold",
-    "V4 salary exemption: itemised HRA/medical vs an overall cap (one-third / absolute) — unconfirmed",
+    "salary_exemption.absolute_cap 450000 — binds only above ~13.5L gross salary; E4-grade",
     "House property repair allowance percentage — no source found; net income is taken as input"
   ],
+
+  "_verified_parts": {
+    "salary_exemption": "PROVED — replay sample-real-2025-26.json (filed AY 2025-26)",
+    "rebate.pct_of_investment": "PROVED — 5400 = 15% x 36000",
+    "rebate.lowest_of_three": "PROVED — investment leg bound on E1",
+    "minimum_tax.applies_when": "PARTIAL — below-threshold branch only on E1",
+    "exempt_threshold": "BOUNDED — proved above 340011 only on E1",
+    "bands": "UNVERIFIED — E1 had gross tax 0"
+  },
 
   "exempt_threshold": {
     "general": 375000,
@@ -58,14 +67,18 @@
     "standard": 5000,
     "first_time_filer": 1000,
     "_applies_when_options": ["total_income_above_threshold", "always"],
-    "applies_when": "total_income_above_threshold"
+    "applies_when": "total_income_above_threshold",
+    "_minimum_tax_policy": "Flat standard 5000 nationwide — no by_area in calculator. E2a (25-26 salary video) mentions 3k/4k/5k zones; E2b + S1 use flat 5k. See docs/verification-findings.md F2."
   },
 
   "salary_exemption": {
-    "_mode_options": ["itemized", "overall_cap"],
-    "mode": "itemized",
-    "house_rent_pct_of_basic": 0.5,
-    "medical_annual_cap": 120000,
+    "_mode_options": ["itemized", "overall_cap", "fraction_of_gross"],
+    "_source": "PROVED E1 + E2a — 6th Schedule Part 1: 1/3 of gross salary exempt",
+    "mode": "fraction_of_gross",
+    "fraction": { "numerator": 1, "denominator": 3 },
+    "absolute_cap": 450000,
+    "house_rent_pct_of_basic": null,
+    "medical_annual_cap": null,
     "conveyance_annual_cap": null,
     "overall_cap": null
   },

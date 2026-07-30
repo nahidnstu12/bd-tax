@@ -7,6 +7,7 @@
   "scripts": {
     "eval": "tsx eval/replay.ts",
     "calc": "tsx eval/calc-cli.ts",
+    "lint:corpus": "tsx scripts/lint-corpus.ts",
     "db:up": "docker compose up -d",
     "db:schema": "docker compose exec -T db psql -U postgres -d ragdb < db/schema.sql"
   },

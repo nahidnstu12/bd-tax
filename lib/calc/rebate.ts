@@ -1,4 +1,4 @@
-import { round2 } from './money';
+import { roundTaka } from './money';
 import type { Breakdown, YearConfig } from './types';
 
 /**
@@ -15,8 +15,8 @@ export function computeRebate(
 ): { amount: number; binding: Breakdown['rebate_binding'] } {
   if (eligibleInvestment <= 0) return { amount: 0, binding: 'none' };
 
-  const byIncome = round2(totalIncome * config.rebate.pct_of_taxable_income);
-  const byInvestment = round2(eligibleInvestment * config.rebate.pct_of_investment);
+  const byIncome = roundTaka(totalIncome * config.rebate.pct_of_taxable_income);
+  const byInvestment = roundTaka(eligibleInvestment * config.rebate.pct_of_investment);
   const byCap = config.rebate.absolute_cap;
 
   const amount = Math.min(byIncome, byInvestment, byCap);
@@ -24,5 +24,5 @@ export function computeRebate(
   const binding: Breakdown['rebate_binding'] =
     amount === byInvestment ? 'investment' : amount === byIncome ? 'income' : 'cap';
 
-  return { amount: round2(amount), binding };
+  return { amount: roundTaka(amount), binding };
 }

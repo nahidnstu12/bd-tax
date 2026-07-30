@@ -43,7 +43,11 @@ export interface YearConfig {
   };
 
   salary_exemption: {
-    mode: 'itemized' | 'overall_cap';
+    mode: 'itemized' | 'overall_cap' | 'fraction_of_gross';
+    /** Used when mode is fraction_of_gross — use rationals, not 0.3333. */
+    fraction?: { numerator: number; denominator: number };
+    /** Max exemption when mode is fraction_of_gross (UNVERIFIED above ~13.5L salary). */
+    absolute_cap?: number | null;
     house_rent_pct_of_basic: number | null;
     medical_annual_cap: number | null;
     conveyance_annual_cap: number | null;

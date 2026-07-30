@@ -1,12 +1,12 @@
 import { applyMinimumTax } from './minimumTax';
-import { round2 } from './money';
+import { round2, roundTaka } from './money';
 import { computeRebate } from './rebate';
 import { taxOnSlabs } from './slabs';
 import type { Breakdown, TaxInputs, YearConfig } from './types';
 
 export * from './types';
 export { loadYearConfig, listYears } from './config';
-export { bdt, round2 } from './money';
+export { bdt, round2, roundTaka } from './money';
 
 /**
  * Compute tax for one assessment year.
@@ -35,8 +35,8 @@ export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
       s.non_cash_benefits,
   );
 
-  const salaryExemption = computeSalaryExemption(config, inputs, warnings);
-  const taxableSalary = round2(Math.max(0, grossSalary - salaryExemption));
+  const salaryExemption = computeSalaryExemption(config, inputs, grossSalary, warnings);
+  const taxableSalary = roundTaka(Math.max(0, grossSalary - salaryExemption));
 
   // --- Total income ---------------------------------------------------------
   if (config.house_property.repair_allowance_pct === null && inputs.house_property_income > 0) {
@@ -45,7 +45,7 @@ export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
     );
   }
 
-  const totalIncome = round2(
+  const totalIncome = roundTaka(
     taxableSalary + inputs.house_property_income + inputs.bank_interest + inputs.other_income,
   );
 
@@ -66,7 +66,7 @@ export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
     totalIncome,
     inputs.eligible_investment,
   );
-  const taxAfterRebate = round2(Math.max(0, grossTax - rebate));
+  const taxAfterRebate = roundTaka(Math.max(0, grossTax - rebate));
 
   // --- Minimum tax ----------------------------------------------------------
   const { net: netTax, applied: minimumApplied } = applyMinimumTax(
@@ -105,12 +105,12 @@ export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
 
     tax_after_rebate: taxAfterRebate,
     minimum_tax_applied: minimumApplied,
-    net_tax: round2(netTax),
+    net_tax: roundTaka(netTax),
 
     source_tax: round2(inputs.source_tax),
     advance_tax: round2(inputs.advance_tax),
-    payable: balance > 0 ? balance : 0,
-    refundable: balance < 0 ? round2(-balance) : 0,
+    payable: balance > 0 ? roundTaka(balance) : 0,
+    refundable: balance < 0 ? roundTaka(-balance) : 0,
 
     warnings,
   };
@@ -125,10 +125,24 @@ export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
 function computeSalaryExemption(
   config: YearConfig,
   inputs: TaxInputs,
+  grossSalary: number,
   warnings: string[],
 ): number {
   const s = inputs.salary;
   const ex = config.salary_exemption;
+
+  if (ex.mode === 'fraction_of_gross') {
+    const frac = ex.fraction;
+    if (!frac || frac.denominator === 0) {
+      warnings.push(
+        'salary_exemption.mode is "fraction_of_gross" but fraction is missing — treating exemption as 0.',
+      );
+      return 0;
+    }
+    let raw = (grossSalary * frac.numerator) / frac.denominator;
+    if (ex.absolute_cap != null) raw = Math.min(raw, ex.absolute_cap);
+    return roundTaka(raw);
+  }
 
   if (ex.mode === 'overall_cap') {
     if (ex.overall_cap === null) {

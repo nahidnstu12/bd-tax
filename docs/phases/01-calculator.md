@@ -3,7 +3,7 @@
 **Goal:** compute tax deterministically, and prove it correct by reproducing a return you
 actually filed.
 **AI involved:** none.
-**Status:** scaffolded — awaiting your filed-return data.
+**Status:** eval passes on filed return + synthetics; **`verified` stays false** until bands are proved — use `_verified_parts` in config.
 
 > **This phase is the gate.** If the calculator cannot reproduce a filed return, nothing
 > built on top of it is worth anything. Do not start Phase 2 until `npm run eval` passes.
@@ -66,6 +66,7 @@ depends on them staying fixed.
   },
   "minimum_tax": { "standard": 5000, "first_time_filer": 1000,
                    "applies_when": "total_income_above_threshold" },
+  // salary: see verification-findings F1 — filed returns use 1/3 gross exempt, not itemized below
   "salary_exemption": { "mode": "itemized", "house_rent_pct_of_basic": 0.5,
                         "medical_annual_cap": 120000, "overall_cap": null }
 }
@@ -81,7 +82,8 @@ category — only the threshold changes.
 
 ```
 gross salary        = basic + HRA + medical + conveyance + bonus + other + non-cash
-salary exemption    = min(HRA, 50% basic) + min(medical, cap)      [itemized mode]
+salary exemption    = min(gross × fraction, absolute_cap), rounded to whole taka   [fraction_of_gross]
+                      OR itemized HRA/medical/conveyance caps (older years)
 taxable salary      = gross salary − exemption
 total income        = taxable salary + house property + bank interest + other
 exempt threshold    = category threshold (+ parent-of-disabled extra)
@@ -107,9 +109,13 @@ is a switch — so the replay eval settles it empirically.
 |---|---|---|
 | **V1** rebate base — "total" vs "taxable" income | `rebate.pct_of_taxable_income` applied to `total_income` | change the field the code multiplies |
 | **V2** minimum tax trigger | `minimum_tax.applies_when` | `total_income_above_threshold` · `always` |
-| **V4** salary exemption shape | `salary_exemption.mode` | `itemized` · `overall_cap` |
+| **V4** salary exemption shape | `salary_exemption.mode` | `itemized` · `overall_cap` · **`fraction_of_gross` (AY 2025-26+ — proved E1)** |
 
-If the eval fails, these switches are the **first** things to try.
+Minimum tax **amount** is a flat **5,000** (`standard`) in both year configs — not
+3,000 / 4,000 by area. Video drift is documented in verification-findings **F2**; no
+`by_area` in the calculator unless a filed return proves otherwise.
+
+If the eval fails, these switches are the **first** things to try — **except V4 on 2025-26+**, which is set to `fraction_of_gross` from filed return E1.
 
 ---
 
@@ -126,7 +132,6 @@ Fill in your real figures from the filed return:
 ```jsonc
 {
   "assessment_year": "2025-26",
-  "_compare": "net_tax",          // or "payable" / "total_income"
   "inputs": {
     "category": "general",
     "is_parent_of_disabled": false,
@@ -141,9 +146,24 @@ Fill in your real figures from the filed return:
     "source_tax": 0,
     "advance_tax": 0
   },
-  "filed_result": { "total_income": 0, "net_tax": 0, "payable": 0 }
+  "filed_result": {
+    "gross_salary": 0,
+    "salary_exemption": 0,
+    "taxable_salary": 0,
+    "total_income": 0,
+    "gross_tax": 0,
+    "rebate": 0,
+    "tax_after_rebate": 0,
+    "net_tax": 0,
+    "minimum_tax": 0,
+    "payable": 0
+  }
 }
 ```
+
+Every key you set in `filed_result` is asserted (within 1 taka). Real returns should
+include at least the income chain (`salary_exemption` … `total_income`) plus tax lines,
+so a wrong exemption cannot hide behind `net_tax: 0`.
 
 `private/` is gitignored. **This data never leaves your machine and is never embedded.**
 
@@ -155,19 +175,20 @@ npm run eval
 
 Pass:
 ```
-  ✓  2025-26.json  net_tax  ->  92,668   expected 92,668
+  ✓  2025-26.json  10 line(s) within 1 taka
   1 passed.
 ```
 
-Fail — it prints the entire working so you can find the gap without a debugger:
+Fail — lists each mismatched line, then the full working:
 ```
-  ✗  2025-26.json  net_tax  ->  92,668   expected 88,140   diff +4,528
+  ✗  2025-26.json  2 mismatch(es)
+
+       ✗ total income           calc …   filed …
+       ✗ net tax                calc …   filed …
 
        gross salary        14,10,000
        salary exemption   -4,80,000
        ...
-       total income        12,80,400
-         (filed)           12,50,000        ← mismatch starts here
 ```
 
 `TOLERANCE` is 1 taka — rounding noise is not a failure.
@@ -196,8 +217,9 @@ income-side bugs obvious immediately.
 
 You were blocked on "get the Finance Act to confirm the numbers." **You are not.**
 
-- Eval **passes** → the config reproduces a real filed return. The figures are almost
-  certainly right. Set `"verified": true` and record what proved it.
+- Eval **passes** on a filed return → record what each line proved in `_verified_parts`.
+  Do **not** set `"verified": true` until gross tax / slabs are exercised (see
+  [`verification-findings.md`](../verification-findings.md) §10).
 - Eval **fails** → something specific is wrong, and section 6 tells you where to look.
 
 A research problem became a test. That is the whole point of building Phase 1 first.
@@ -206,13 +228,13 @@ A research problem became a test. That is the whole point of building Phase 1 fi
 
 ## 8. Acceptance criteria
 
-- [ ] `npm run calc -- 2025-26` prints a full breakdown
-- [ ] `npm run eval` reproduces at least one filed return within 1 taka
-- [ ] Ideally both years, if you have two filed returns
-- [ ] `"verified": true` set on any config a filed return has validated
-- [ ] `_verify` entries that the eval settled are resolved and removed
+- [x] `npm run calc -- 2025-26` prints a full breakdown
+- [x] `npm run eval` reproduces at least one filed return within 1 taka
+- [x] Synthetic fixtures for both configured years (not two filed returns)
+- [x] `_verified_parts` on 2025-26; global `verified` remains false until bands proved
+- [x] V4 salary exemption settled in config (⅓ gross); cap remains in `_verify`
 
-**Only then start Phase 2.**
+**Phase 1 gate met for corpus/indexing work.** Finish remaining corpus files (Phase 2) before Phase 3.
 
 ---
 

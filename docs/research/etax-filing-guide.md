@@ -219,7 +219,7 @@ The return certificate displays instantly on submission. Downloadable from the *
 |---|---|
 | **AY 2025-2026 income year = 01-07-2024 → 30-06-2025** | Confirms the inference in `sources-2026-07-29.md` §2 |
 | Taxpayer category checkboxes: freedom fighter, person with disability, parent/guardian of disabled | Confirms the threshold categories our config must model — including the parent/guardian benefit |
-| "Location of Main Source of Income" is still collected | May matter for minimum tax; investigate before assuming the flat structure (research doc §3.4 / V6) |
+| "Location of Main Source of Income" is still collected | May affect portal minimum tax in some cycles; **calculator uses flat 5,000** — see [`verification-findings.md`](../verification-findings.md) F2 |
 | Rebate = "Total Actual Investment" → "Total Allowable Investment for Rebate" | The portal computes an allowable cap before applying the rebate rate — matches the lowest-of-three rule |
 | Full eligible-investment category list (§3.3) | Directly seeds `config.json` eligible investments — **12 categories, more than any blog listed** |
 | Official form is **IT-11GA (2023)** | The form our output should map to |

@@ -180,13 +180,13 @@ process.exit(errors ? 1 : 0)
 
 ## 7. Acceptance criteria
 
-- [ ] Every file has valid front-matter (`topic`, plus `assessment_year` for year folders)
-- [ ] Every file uses `##` headings, one idea each
-- [ ] Sections are roughly 150–500 words
-- [ ] `shared/` process content written — enough to test the pipeline without rate risk
-- [ ] An `out-of-scope.md` exists
-- [ ] `npx tsx scripts/lint-corpus.ts` passes
-- [ ] Numbers in prose match `config.json` for the same year
+- [x] Every file has valid front-matter (`topic`, plus `assessment_year` for year folders)
+- [x] Every file uses `##` headings, one idea each
+- [x] Sections are roughly 150–500 words (some sections shorter — OK for v1)
+- [x] `shared/` process content written — enough to test the pipeline without rate risk
+- [x] An `out-of-scope.md` exists
+- [x] `npm run lint:corpus` passes
+- [x] Numbers in prose match `config.json` for the same year (slab bands marked unverified where config is)
 
 ---
 

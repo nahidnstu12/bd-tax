@@ -8,6 +8,9 @@ Start here.
 |---|---|
 | [`planning-and-architecture.md`](planning-and-architecture.md) | The mental model, scope, data model, architecture, privacy, risks |
 | [`setup-guide.md`](setup-guide.md) | **Install and run it anywhere** — prerequisites, env, first run, yearly ritual, troubleshooting |
+| [`verification-findings.md`](verification-findings.md) | **What real evidence proved and refuted** (2026-07-30) — salary ⅓ exempt (F1), flat min tax policy (F2), per-AY alignment §2.1 |
+
+Phase 1 **eval gate passed**. Phase 2 corpus lives under `rules/shared/corpus/` and `rules/ay-*/corpus/` — run `npm run lint:corpus`.
 
 ## Build it, phase by phase
 
@@ -30,9 +33,17 @@ Each phase is independently shippable and has its own acceptance criteria.
 |---|---|
 | [`research/sources-2026-07-29.md`](research/sources-2026-07-29.md) | Tax figures for AY 2025-26 and 2026-27 from commentary blogs — **unverified**, with the open-questions list |
 | [`research/etax-filing-guide.md`](research/etax-filing-guide.md) | The official NBR e-Return filing process, from the NBR user manual |
+| [`research/video-guide.md`](research/video-guide.md) | **Index** — video evidence registry, drift table, links to per-AY notes |
+| [`research/video-guide-ay-2025-26-salary.md`](research/video-guide-ay-2025-26-salary.md) | AY **2025-26** salaried filing walkthrough (`E2a`) |
+| [`research/video-guide-ay-2026-27-policy-updates.md`](research/video-guide-ay-2026-27-policy-updates.md) | AY **2026-27** policy / portal changes (`E2b`) |
+| [`research/video-guide-ay-2026-27-zero-return.md`](research/video-guide-ay-2026-27-zero-return.md) | AY **2026-27** zero-tax return — student/homemaker/&lt;400k (`E2c`) |
 
 **Provenance rule:** every figure that reaches `rules/*/config.json` cites an Act and
 section — never a blog. Blog commentary may inform corpus *prose*, never *numbers*.
+
+Sources are **ranked**, and a lower-ranked one may not overturn a higher-ranked one:
+filed return › official manual › tutorial notes › blogs. See
+[`verification-findings.md`](verification-findings.md) §1.
 
 ## The one rule behind everything
 

@@ -1,4 +1,4 @@
-import { round2 } from './money';
+import { round2, roundTaka } from './money';
 import type { Band, BandRow } from './types';
 
 /**
@@ -20,7 +20,7 @@ export function taxOnSlabs(
   for (const band of bands) {
     const width = band.width ?? Infinity;
     const amount = Math.min(remaining, width);
-    const tax = round2(amount * band.rate);
+    const tax = roundTaka(amount * band.rate);
 
     rows.push({
       band:
@@ -33,7 +33,7 @@ export function taxOnSlabs(
       tax,
     });
 
-    total = round2(total + tax);
+    total = roundTaka(total + tax);
     remaining = round2(remaining - amount);
     lowerEdge += band.width ?? 0;
 

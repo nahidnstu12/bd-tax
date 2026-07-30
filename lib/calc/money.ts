@@ -3,6 +3,11 @@ export function round2(n: number): number {
   return Math.round((n + Number.EPSILON) * 100) / 100;
 }
 
+/** Whole taka (NBR form lines). One filed return suggests round-to-nearest, not truncate. */
+export function roundTaka(n: number): number {
+  return Math.round(n + Number.EPSILON);
+}
+
 /** Format for display, e.g. 141300 -> "1,41,300" (BD lakh grouping). */
 export function bdt(n: number): string {
   const fixed = round2(n).toFixed(2).replace(/\.00$/, '');

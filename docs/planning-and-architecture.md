@@ -64,6 +64,8 @@ Therefore: RAG can only return what someone already wrote down. Anything requiri
 - Company / firm taxation
 - Actual e-return submission (guidance only — never files anything)
 
+**Settlement lines not in v1 calculator:** net-wealth / tobacco / environmental surcharge (form line 17), delay interest and penalty (line 18), and adjustment of prior-year refund (line 22). The calculator uses `net_tax − source_tax − advance_tax` only. Adding pass-through fields is easy; computing surcharges is deferred until a return needs it — see [`verification-findings.md`](verification-findings.md) F8.
+
 **Out-of-scope inputs must make the app say so and stop.** Refusing is a feature; it is most of what makes the tool trustworthy.
 
 ### Non-goals
