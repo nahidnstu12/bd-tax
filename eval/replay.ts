@@ -52,6 +52,26 @@ const FILED_ASSERTIONS: {
   },
   { filedKey: 'payable', label: 'payable', actual: ({ result }) => result.payable },
   { filedKey: 'refundable', label: 'refundable', actual: ({ result }) => result.refundable },
+  {
+    filedKey: 'lifestyle_expense_total',
+    label: 'lifestyle expenses',
+    actual: ({ result }) => result.wealth.lifestyle_expense_total,
+  },
+  {
+    filedKey: 'total_sources',
+    label: 'wealth total sources',
+    actual: ({ result }) => result.wealth.total_sources,
+  },
+  {
+    filedKey: 'closing_net_wealth',
+    label: 'closing net wealth',
+    actual: ({ result }) => result.wealth.closing_net_wealth,
+  },
+  {
+    filedKey: 'wealth_difference',
+    label: 'wealth difference',
+    actual: ({ result }) => result.wealth.wealth_difference,
+  },
 ];
 
 interface FiledResult {
@@ -66,6 +86,10 @@ interface FiledResult {
   minimum_tax?: number;
   payable?: number;
   refundable?: number;
+  lifestyle_expense_total?: number;
+  total_sources?: number;
+  closing_net_wealth?: number;
+  wealth_difference?: number;
 }
 
 interface ReturnFixture {
@@ -143,6 +167,13 @@ function printWorking(
   console.log(`       net tax             ${bdt(result.net_tax)}`);
   console.log(`       payable             ${bdt(result.payable)}`);
   console.log(`       refundable          ${bdt(result.refundable)}`);
+  console.log(`       lifestyle expenses  ${bdt(result.wealth.lifestyle_expense_total)}`);
+  console.log(`       wealth sources      ${bdt(result.wealth.total_sources)}`);
+  console.log(`       wealth outflows     ${bdt(result.wealth.total_outflows)}`);
+  console.log(`       closing net wealth  ${bdt(result.wealth.closing_net_wealth)}`);
+  if (result.wealth.declared_closing_net_wealth != null) {
+    console.log(`       wealth difference   ${bdt(result.wealth.wealth_difference)}`);
+  }
   console.log('');
 
 }

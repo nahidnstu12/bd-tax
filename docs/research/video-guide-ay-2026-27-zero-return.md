@@ -5,7 +5,7 @@
 **Audience:** Taxable income **below BDT 400,000** (general slab-free threshold for 2026-27) — **zero tax payable**, not “all fields zero”  
 **Portal:** https://etaxnbr.gov.bd (search “e return” → official site)  
 **Calculator config:** `rules/ay-2026-27/config.json` (`exempt_threshold.general`: 400000)  
-**Index / drift:** [`video-guide.md`](video-guide.md)
+**Index / drift:** [`video-guide.md`](video-guide.md) · **All fields:** [`video-guide-portal-field-map.md`](video-guide-portal-field-map.md) (column **V3**)
 
 > Rank-3 evidence. Demo mixes **remittance (exempt) + tuition + salary**; pick only the heads that match the filer. Reconciliation (**Difference = 0**) is mandatory even when tax is zero.
 

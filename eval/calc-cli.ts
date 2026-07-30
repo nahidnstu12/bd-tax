@@ -76,6 +76,17 @@ line('Source tax', r.source_tax, '-');
 line('Advance tax', r.advance_tax, '-');
 line(r.refundable > 0 ? 'REFUNDABLE' : 'PAYABLE', r.refundable > 0 ? r.refundable : r.payable);
 
+console.log('\n  --- Expenditure & wealth (e-Return tabs) ---\n');
+line('Lifestyle expenses total', r.wealth.lifestyle_expense_total);
+line('Prior net wealth', r.wealth.prior_net_wealth);
+line('Total sources of fund', r.wealth.total_sources);
+line('Total outflows', r.wealth.total_outflows);
+line('Closing net wealth (calc)', r.wealth.closing_net_wealth);
+if (r.wealth.declared_closing_net_wealth != null) {
+  line('Declared closing wealth', r.wealth.declared_closing_net_wealth);
+  line('Wealth difference', r.wealth.wealth_difference);
+}
+
 if (r.warnings.length) {
   console.log('');
   for (const w of r.warnings) console.log(`  ! ${w}`);

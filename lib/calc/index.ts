@@ -1,12 +1,16 @@
 import { applyMinimumTax } from './minimumTax';
+import { normalizeTaxInputs } from './normalize';
 import { round2, roundTaka } from './money';
 import { computeRebate } from './rebate';
 import { taxOnSlabs } from './slabs';
-import type { Breakdown, TaxInputs, YearConfig } from './types';
+import { computeWealthReconciliation } from './wealth';
+import type { Breakdown, NormalizedTaxInputs, TaxInputs, YearConfig } from './types';
 
 export * from './types';
 export { loadYearConfig, listYears } from './config';
 export { bdt, round2, roundTaka } from './money';
+export { normalizeTaxInputs } from './normalize';
+export { EMPTY_LIFESTYLE, totalLifestyleExpenditure } from './expenditure';
 
 /**
  * Compute tax for one assessment year.
@@ -15,7 +19,8 @@ export { bdt, round2, roundTaka } from './money';
  * project entirely and tax computation still works. That is the test of
  * whether the layering is right.
  */
-export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
+export function computeTax(config: YearConfig, rawInputs: TaxInputs): Breakdown {
+  const inputs = normalizeTaxInputs(rawInputs);
   const warnings: string[] = [];
   if (!config.verified) {
     warnings.push(
@@ -81,6 +86,19 @@ export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
   const paid = round2(inputs.source_tax + inputs.advance_tax);
   const balance = round2(netTax - paid);
 
+  const wealth = computeWealthReconciliation(
+    inputs,
+    grossSalary,
+    totalIncome,
+    salaryExemption,
+  );
+
+  if (wealth.declared_closing_net_wealth != null && Math.abs(wealth.wealth_difference) > 1) {
+    warnings.push(
+      `Wealth reconcile: declared closing ${wealth.declared_closing_net_wealth} vs computed ${wealth.closing_net_wealth} (diff ${wealth.wealth_difference}).`,
+    );
+  }
+
   return {
     assessment_year: config.assessment_year,
     config_verified: config.verified,
@@ -111,6 +129,8 @@ export function computeTax(config: YearConfig, inputs: TaxInputs): Breakdown {
     advance_tax: round2(inputs.advance_tax),
     payable: balance > 0 ? roundTaka(balance) : 0,
     refundable: balance < 0 ? roundTaka(-balance) : 0,
+
+    wealth,
 
     warnings,
   };

@@ -34,6 +34,7 @@ Each phase is independently shippable and has its own acceptance criteria.
 | [`research/sources-2026-07-29.md`](research/sources-2026-07-29.md) | Tax figures for AY 2025-26 and 2026-27 from commentary blogs — **unverified**, with the open-questions list |
 | [`research/etax-filing-guide.md`](research/etax-filing-guide.md) | The official NBR e-Return filing process, from the NBR user manual |
 | [`research/video-guide.md`](research/video-guide.md) | **Index** — video evidence registry, drift table, links to per-AY notes |
+| [`research/video-guide-portal-field-map.md`](research/video-guide-portal-field-map.md) | **Portal field map** — wizard fields × E3 × V1/V2/V3 × E1 |
 | [`research/video-guide-ay-2025-26-salary.md`](research/video-guide-ay-2025-26-salary.md) | AY **2025-26** salaried filing walkthrough (`E2a`) |
 | [`research/video-guide-ay-2026-27-policy-updates.md`](research/video-guide-ay-2026-27-policy-updates.md) | AY **2026-27** policy / portal changes (`E2b`) |
 | [`research/video-guide-ay-2026-27-zero-return.md`](research/video-guide-ay-2026-27-zero-return.md) | AY **2026-27** zero-tax return — student/homemaker/&lt;400k (`E2c`) |

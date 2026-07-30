@@ -5,7 +5,7 @@
 **Language:** Bengali transcript → English, AI/RAG friendly  
 **Portal:** https://etaxnbr.gov.bd  
 **Calculator config:** `rules/ay-2025-26/config.json`  
-**Pair with:** [`etax-filing-guide.md`](etax-filing-guide.md), [`video-guide.md`](video-guide.md) (index + drift)
+**Pair with:** [`etax-filing-guide.md`](etax-filing-guide.md), [`video-guide.md`](video-guide.md) (index + drift), **[`video-guide-portal-field-map.md`](video-guide-portal-field-map.md)** (column **V1**)
 
 > Rank-3 evidence (video). UX and field semantics are useful; **digits may be wrong** (see `verification-findings.md` F11). Cross-check arithmetic against `private/returns/sample-real-2025-26.json` where available.
 

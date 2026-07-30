@@ -102,6 +102,7 @@ These matter more than anything you will do in Phase 3.
 | `payments.md` | Internet banking / card / mobile banking, e-Chalan, Sonali Bank |
 | `source-tax-verification.md` | Only Car AIT, iBAS++ salary, Sanchayapatra auto-verify |
 | `documents.md` | TIN certificate, acknowledgement, Express Certificate/PSR, challan |
+| `expenditure.md` | Lifestyle expense statement — wealth reconcile, not taxable income |
 
 ### `ay-<year>/` — rules
 

@@ -85,6 +85,55 @@ export interface TaxInputs {
   /** Already-paid amounts, deducted at the end. */
   source_tax: number;
   advance_tax: number;
+
+  /** Expenditure tab — lifestyle statement (does not reduce taxable income). */
+  expenditure?: Partial<LifestyleExpenditure>;
+
+  /** Assets / wealth reconcile (simplified — no per-asset lines in v1). */
+  wealth?: Partial<WealthInputs>;
+}
+
+/** Matches NBR e-Return Expenditure tab line groups. */
+export interface LifestyleExpenditure {
+  food_clothing_essentials: number;
+  accommodation: number;
+  auto_transport: number;
+  household_utility: number;
+  education: number;
+  /** Local / foreign travel, vacation (e-Return lifestyle line 6). */
+  travel_vacation: number;
+  festival_special: number;
+  /** Any other lifestyle expense not covered above. */
+  other_lifestyle: number;
+  /** Tax, charges etc. paid during the income year (expense side of wealth). */
+  tax_charges_paid: number;
+  personal_loan_interest: number;
+  environmental_surcharge: number;
+}
+
+export interface WealthInputs {
+  prior_net_wealth: number;
+  /** Non-income sources (gifts, inheritances) — user-supplied. */
+  other_sources: number;
+  /** Asset purchases / other outflows not in lifestyle lines. */
+  other_outflows: number;
+  /** Optional: filed closing wealth — if set, wealth_difference is computed. */
+  declared_closing_net_wealth: number | null;
+}
+
+export interface WealthReconciliation {
+  gross_salary_for_wealth: number;
+  income_sources: number;
+  other_sources: number;
+  prior_net_wealth: number;
+  total_sources: number;
+  lifestyle_expense_total: number;
+  other_outflows: number;
+  total_outflows: number;
+  closing_net_wealth: number;
+  declared_closing_net_wealth: number | null;
+  /** declared − computed closing; 0 when declared omitted. */
+  wealth_difference: number;
 }
 
 export interface BandRow {
@@ -126,6 +175,8 @@ export interface Breakdown {
   advance_tax: number;
   payable: number;
   refundable: number;
+
+  wealth: WealthReconciliation;
 
   /** Anything the user should be told the calculator could not handle. */
   warnings: string[];

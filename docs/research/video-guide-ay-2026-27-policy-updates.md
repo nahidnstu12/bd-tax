@@ -5,7 +5,7 @@
 **Language:** Bengali transcript → English, AI/RAG friendly  
 **Portal:** https://etaxnbr.gov.bd — **2026-27** selectable when video was recorded  
 **Calculator config:** `rules/ay-2026-27/config.json`  
-**Pair with:** [`sources-2026-07-29.md`](sources-2026-07-29.md), [`video-guide.md`](video-guide.md) (index + drift)
+**Pair with:** [`sources-2026-07-29.md`](sources-2026-07-29.md), [`video-guide.md`](video-guide.md) (index + drift), **[`video-guide-portal-field-map.md`](video-guide-portal-field-map.md)** (column **V2** + §13)
 
 > Rank-3 evidence. Slab/rebate figures **align with blog sources** in repo; quarter penalties and flat minimum tax need **Act/circular or filed return** confirmation.
 

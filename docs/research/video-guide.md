@@ -16,6 +16,8 @@ Rank-3 sources (RM Konsa tutorials). **Not source of truth for numbers** — use
 
 Add new clips as **new files** (`video-guide-ay-YYYY-YY-<topic>.md`); extend the drift table below instead of overwriting an older AY note.
 
+**Full portal field inventory (all tabs, all 3 videos + manual + E1):** [`video-guide-portal-field-map.md`](video-guide-portal-field-map.md)
+
 ---
 
 ## Drift & comparison (video vs video vs repo)

@@ -48,6 +48,8 @@ Therefore: RAG can only return what someone already wrote down. Anything requiri
 - Salary income (basic, allowances, bonus)
 - House property income
 - Bank / savings interest
+- **Lifestyle expenditure** (wealth reconcile — not deductible from taxable income in v1)
+- **Prior net wealth / closing wealth** (simplified reconcile)
 - Investment rebate (DPS, insurance, savings certificates, etc.)
 - Standard exemptions and thresholds
 - Minimum tax
