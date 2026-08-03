@@ -26,6 +26,7 @@ Each phase is independently shippable and has its own acceptance criteria.
 | 4 | [`phases/04-ask-tab.md`](phases/04-ask-tab.md) | Ask API: retrieval, score floor, citations | yes |
 | 5 | [`phases/05-calculate-tab.md`](phases/05-calculate-tab.md) | UI + LLM narration of the breakdown | yes |
 | 6 | [`phases/06-polish.md`](phases/06-polish.md) | Year selector, config diff, retrieval eval | — |
+| 7 | [`phases/07-personal-assistant.md`](phases/07-personal-assistant.md) | Local filing coach, planning scenarios, finance record | yes |
 
 ## Research (raw input, not source of truth)
 

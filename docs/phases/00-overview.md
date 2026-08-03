@@ -14,6 +14,7 @@ Phase 3  INDEXING            embeddings only
 Phase 4  ASK TAB             retrieval + generation
 Phase 5  CALCULATE TAB       generation (narration only)
 Phase 6  POLISH              year selector, diffs, retrieval eval
+Phase 7  PERSONAL ASSISTANT  local filing coach + planning scenarios
 ```
 
 **Two thirds of the value is built before any AI appears.** That is not a flaw in the
@@ -45,6 +46,7 @@ numbers and writes sentences. Do the hard retrieval work first.
 | 4 | `app/api/ask`, score floor, citations | Phase 3 |
 | 5 | `app/` UI, `/api/calculate`, narration | Phases 1 + 4 |
 | 6 | year selector, `scripts/config-diff.ts`, `eval/retrieval.ts` | all |
+| 7 | local drafts, filing checklist, deterministic planning scenarios | Phase 6 |
 
 ## Definition of done, per phase
 
@@ -69,6 +71,7 @@ Each phase doc ends with acceptance criteria. **Treat them as gates, not suggest
 | 4 | one evening |
 | 5 | a weekend |
 | 6 | a weekend |
+| 7 | a weekend |
 
 ## What you will actually learn
 
