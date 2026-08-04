@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BD Tax Assistant — Project Guide &amp; User Stories</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#161a21; --panel2:#1c212a; --line:#2a313d;
+    --ink:#e6e9ef; --dim:#9aa4b2; --faint:#6b7683;
+    --accent:#5fb3f5; --green:#5fd39a; --amber:#f2c14e; --red:#f2777a; --violet:#b48ef0;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Inter,Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f7f8fa; --panel:#ffffff; --panel2:#f0f2f6; --line:#dfe3ea;
+      --ink:#161a21; --dim:#5a6472; --faint:#8a94a2;
+      --accent:#1668b8; --green:#1c8a5c; --amber:#9a6f00; --red:#c0392b; --violet:#6f42c1;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:15.5px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 120px}
+
+  /* ---------- header ---------- */
+  header.top{padding:56px 0 28px;border-bottom:1px solid var(--line);margin-bottom:32px}
+  .eyebrow{font:600 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:38px;line-height:1.15;margin:14px 0 10px;letter-spacing:-.02em}
+  .sub{color:var(--dim);font-size:17px;max-width:70ch;margin:0}
+  .creed{margin-top:22px;padding:16px 18px;background:var(--panel);border:1px solid var(--line);
+         border-left:3px solid var(--accent);border-radius:8px;font-size:16px}
+  .creed b{color:var(--accent)}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 92%,transparent);
+      backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-bottom:34px}
+  nav .inner{max-width:1080px;margin:0 auto;padding:10px 24px;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{font:600 12px/1 var(--mono);color:var(--dim);text-decoration:none;padding:7px 10px;border-radius:6px}
+  nav a:hover{background:var(--panel2);color:var(--ink)}
+
+  /* ---------- generic ---------- */
+  h2{font-size:26px;margin:56px 0 6px;letter-spacing:-.01em}
+  h2 .num{font:700 13px/1 var(--mono);color:var(--faint);display:block;margin-bottom:8px;letter-spacing:.14em}
+  h3{font-size:17px;margin:26px 0 8px}
+  p{margin:10px 0}
+  .lede{color:var(--dim);font-size:16px;max-width:74ch;margin-bottom:18px}
+  code{font-family:var(--mono);font-size:.88em;background:var(--panel2);padding:2px 5px;border-radius:4px;color:var(--accent)}
+  pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow-x:auto;
+      font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--dim)}
+  pre b{color:var(--ink);font-weight:600}
+  pre .c{color:var(--faint)}
+  pre .g{color:var(--green)}
+  pre .a{color:var(--accent)}
+  pre .r{color:var(--red)}
+  pre .y{color:var(--amber)}
+  hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+
+  /* ---------- pills ---------- */
+  .pill{display:inline-block;font:600 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+        padding:5px 9px;border-radius:999px;border:1px solid var(--line);color:var(--dim);background:var(--panel2)}
+  .pill.done{color:var(--green);border-color:color-mix(in srgb,var(--green) 40%,transparent)}
+  .pill.next{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,transparent)}
+  .pill.todo{color:var(--faint)}
+  .pill.ai{color:var(--violet);border-color:color-mix(in srgb,var(--violet) 40%,transparent)}
+  .pill.noai{color:var(--dim)}
+
+  /* ---------- outcome mock ---------- */
+  .mock{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .mock .bar{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel2);align-items:center}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--line)}
+  .mock .bar span{font:600 11px/1 var(--mono);color:var(--faint);margin-left:8px}
+  .mock .body{padding:18px}
+  .tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+  .tab{font:600 12px/1 var(--mono);padding:9px 14px;color:var(--faint);border-bottom:2px solid transparent}
+  .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+  /* ---------- journey ---------- */
+  .journey{list-style:none;padding:0;margin:22px 0;counter-reset:j}
+  .journey li{position:relative;padding:0 0 22px 46px;border-left:1px solid var(--line);margin-left:14px}
+  .journey li:last-child{border-left-color:transparent;padding-bottom:0}
+  .journey li::before{counter-increment:j;content:counter(j);position:absolute;left:-14px;top:0;
+    width:28px;height:28px;border-radius:50%;background:var(--panel);border:1px solid var(--line);
+    color:var(--accent);font:700 12px/26px var(--mono);text-align:center}
+  .journey b{display:block;font-size:15.5px;margin-bottom:2px}
+  .journey small{color:var(--faint);font:600 10.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+  .journey p{margin:4px 0 0;color:var(--dim);font-size:14.5px}
+
+  /* ---------- phase cards ---------- */
+  .phase{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:20px 0}
+  .phase.gate{border-left:3px solid var(--green)}
+  .phase h3{margin:0;font-size:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .phase h3 .no{font:800 12px/1 var(--mono);color:var(--faint);background:var(--panel2);border:1px solid var(--line);
+                padding:6px 8px;border-radius:6px}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 14px}
+  .goal{color:var(--dim);margin:0 0 14px;font-size:15px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media (max-width:760px){.cols{grid-template-columns:1fr}}
+  .block h4{font:700 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);
+            margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .stories{list-style:none;padding:0;margin:0}
+  .stories li{padding:9px 0 9px 20px;position:relative;font-size:14.5px;border-bottom:1px dashed var(--line)}
+  .stories li:last-child{border-bottom:0}
+  .stories li::before{content:"▸";position:absolute;left:0;color:var(--accent)}
+  .stories em{font-style:normal;color:var(--dim)}
+  .builds{list-style:none;padding:0;margin:0;font-family:var(--mono);font-size:12.5px}
+  .builds li{padding:6px 0;color:var(--dim);border-bottom:1px dashed var(--line)}
+  .builds li:last-child{border-bottom:0}
+  .builds b{color:var(--ink);font-weight:600}
+  .done{margin-top:16px;padding:12px 14px;background:var(--panel2);border-radius:8px;font-size:14px}
+  .done b{color:var(--green);font:700 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+          display:block;margin-bottom:6px}
+
+  /* ---------- tables ---------- */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+  th{text-align:left;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
+     padding:10px 12px;border-bottom:1px solid var(--line)}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--dim)}
+  td:first-child{color:var(--ink)}
+  tr:last-child td{border-bottom:0}
+
+  /* ---------- scope ---------- */
+  .scope{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+  @media (max-width:760px){.scope{grid-template-columns:1fr}}
+  .scope div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .scope .in{border-top:3px solid var(--green)}
+  .scope .out{border-top:3px solid var(--red)}
+  .scope h4{margin:0 0 10px;font:700 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .scope .in h4{color:var(--green)} .scope .out h4{color:var(--red)}
+  .scope ul{margin:0;padding-left:18px;color:var(--dim);font-size:14.5px}
+  .scope li{padding:3px 0}
+
+  .callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--amber);
+           border-radius:8px;padding:14px 18px;margin:18px 0;color:var(--dim);font-size:14.5px}
+  .callout b{color:var(--ink)}
+
+  footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+  @media print{nav{display:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+
+<nav><div class="inner">
+  <a href="#outcome">Outcome</a>
+  <a href="#journey">User journey</a>
+  <a href="#p1">1 · Calculator</a>
+  <a href="#p2">2 · Corpus</a>
+  <a href="#p3">3 · Indexing</a>
+  <a href="#p4">4 · Ask</a>
+  <a href="#p5">5 · Calculate</a>
+  <a href="#p6">6 · Measure</a>
+  <a href="#p7">7 · Assistant</a>
+  <a href="#order">Why this order</a>
+  <a href="#scope">Scope</a>
+  <a href="#glossary">Glossary</a>
+</div></nav>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">BD Tax Assistant · Project Guide</div>
+  <h1>What this project actually produces</h1>
+  <p class="sub">A local-only tax-filing assistant for Bangladeshi individual taxpayers — and, underneath it,
+  a production-shaped lesson in how RAG systems are really built. Seven phases, each with the user stories
+  it exists to satisfy.</p>
+  <div class="creed">
+    <b>The one rule:</b> it is a calculator with a librarian attached. The AI is only the voice.<br>
+    <span style="color:var(--dim)">Facts are versioned data · math is deterministic code · the model explains and retrieves, it never decides or computes.</span>
+  </div>
+</header>
+
+<!-- ============================ OUTCOME ============================ -->
+<h2 id="outcome"><span class="num">THE OUTCOME</span>What you have when it is finished</h2>
+<p class="lede">Not a chatbot. A small desktop-local web app plus a set of command-line tools, where every
+taka on screen traces back to either a number you typed or a figure in a versioned rules file — and the
+model's only job is to put that into sentences you can read.</p>
+
+<div class="mock">
+  <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span>localhost:3000 — BD Tax Assistant (local only)</span></div>
+  <div class="body">
+    <div class="tabs">
+      <div class="tab on">Calculate</div><div class="tab">Ask</div><div class="tab">Compare years</div><div class="tab">My return</div>
+      <div style="margin-left:auto" class="tab">AY 2026-27 ▾</div>
+    </div>
+<pre><span class="c">┌─ YOUR NUMBERS ─────────────────┐  ┌─ THE WORKING (deterministic) ─────────────────┐</span>
+<span class="c">│</span> basic            <b>7,20,000</b>      <span class="c">│</span>  <span class="c">│</span> gross salary                     <b>14,10,000</b>  <span class="c">│</span>
+<span class="c">│</span> house rent       <b>3,60,000</b>      <span class="c">│</span>  <span class="c">│</span> salary exemption (⅓ gross)       <b>-4,70,000</b>  <span class="c">│</span>
+<span class="c">│</span> medical            <b>60,000</b>      <span class="c">│</span>  <span class="c">│</span> taxable salary                    <b>9,40,000</b>  <span class="c">│</span>
+<span class="c">│</span> bonus            <b>1,20,000</b>      <span class="c">│</span>  <span class="c">│</span> + bank interest                     <b>18,000</b>  <span class="c">│</span>
+<span class="c">│</span> bank interest      <b>18,000</b>      <span class="c">│</span>  <span class="c">│</span> <b>total income</b>                      <b>9,58,000</b>  <span class="c">│</span>
+<span class="c">│</span> investment       <b>4,00,000</b>      <span class="c">│</span>  <span class="c">│</span> exempt threshold (general)       <b>-3,75,000</b>  <span class="c">│</span>
+<span class="c">│</span> source tax         <b>85,000</b>      <span class="c">│</span>  <span class="c">│</span> band 1  3,00,000 @ 10%              <b>30,000</b>  <span class="c">│</span>
+<span class="c">└────────────────────────────────┘</span>  <span class="c">│</span> band 2  2,83,000 @ 15%              <b>42,450</b>  <span class="c">│</span>
+                                     <span class="c">│</span> gross tax                           <b>72,450</b>  <span class="c">│</span>
+<span class="y">⚠ config unverified: slab bands</span>       <span class="c">│</span> rebate  <span class="a">(bound by: 3% of income)</span>   <b>-28,740</b>  <span class="c">│</span>
+<span class="y">⚠ house property assumed NET</span>          <span class="c">│</span> <b>net tax</b>                            <b>43,710</b>  <span class="c">│</span>
+                                     <span class="c">│</span> <b>refundable</b>                         <b>41,290</b>  <span class="c">│</span>
+                                     <span class="c">└───────────────────────────────────────────────┘</span>
+
+<span class="c">┌─ IN PLAIN LANGUAGE ─ (LLM — uses only the numbers above) ──────────────────────┐</span>
+<span class="c">│</span> Your total income was 9,58,000 taka. As a general-category taxpayer the first  <span class="c">│</span>
+<span class="c">│</span> 3,75,000 was tax-free, and the remainder was taxed across two slabs. Your      <span class="c">│</span>
+<span class="c">│</span> rebate was limited by the 3%-of-income cap — <span class="a">investing more would not reduce</span>   <span class="c">│</span>
+<span class="c">│</span> <span class="a">your tax further.</span> After 85,000 of tax already deducted at source, 41,290 is     <span class="c">│</span>
+<span class="c">│</span> refundable.                                                                    <span class="c">│</span>
+<span class="c">└────────────────────────────────────────────────────────────────────────────────┘</span></pre>
+  </div>
+</div>
+
+<h3>And on the command line — the part that makes it trustworthy</h3>
+<pre>$ npm run eval
+
+  <span class="g">✓</span>  2025-26.json   10 line(s) within 1 taka        <span class="c">← replays a return you really filed</span>
+  <span class="g">✓</span>  2026-27.json   10 line(s) within 1 taka
+
+  <span class="g">✓</span>  "Is festival bonus taxable?"          rank 1   best=0.847
+  <span class="r">✗</span>  "How much medical allowance is exempt?"        best=0.512   <span class="c">← retrieval miss, findable</span>
+  <span class="g">✓</span>  refuse: "What is the corporate tax rate?"      best=0.383   <span class="c">← correctly refused</span>
+
+  retrieval hit rate   18/20
+  refusal accuracy      2/2</pre>
+
+<div class="callout">
+  <b>That output is the whole product thesis.</b> Most side projects can't tell you whether they still work
+  after a change. This one prints two numbers: <i>does the math still reproduce a real filed return</i>, and
+  <i>does search still find the right document</i>. Everything in Phases 1 and 6 exists to make those two lines exist.
+</div>
+
+<h3>Five properties you end up owning</h3>
+<table>
+  <tr><th>Property</th><th>Why it matters</th></tr>
+  <tr><td>Every number traces to a config value or your own input</td><td>No figure is ever invented by a model — you can point at where it came from</td></tr>
+  <tr><td>Correctness is <em>proved</em>, not claimed</td><td>The calculator reproduces returns actually accepted by NBR, to the taka</td></tr>
+  <tr><td>Retrieval quality is <em>measured</em></td><td>Chunking changes become engineering instead of vibes</td></tr>
+  <tr><td>A new tax year costs ~2 hours and zero code changes</td><td>Rules are data in a folder; copy last year's, edit the figures</td></tr>
+  <tr><td>Nothing personal leaves the machine</td><td>Embeddings run locally; only public rule text reaches a hosted model</td></tr>
+</table>
+
+<hr>
+
+<!-- ============================ JOURNEY ============================ -->
+<h2 id="journey"><span class="num">END TO END</span>One taxpayer, one filing season</h2>
+<p class="lede">The clearest way to see the outcome is to follow a single user through it. Rahim is a salaried
+resident individual who has filed once before. They are not a tax expert and do not want to become one.</p>
+
+<ol class="journey">
+  <li>
+    <small>Phase 7 · intake</small>
+    <b>Rahim opens the app in July and starts a draft for AY 2026-27.</b>
+    <p>They paste in figures from their salary certificate. The app extracts <em>candidates</em> and asks them to
+    confirm each one. Nothing enters the return until Rahim says yes. The draft is saved to a gitignored folder
+    on their own disk — no NID, no TIN, just filenames pointing at their own documents.</p>
+  </li>
+  <li>
+    <small>Phase 5 + Phase 1 · calculate</small>
+    <b>The app computes the tax and shows the full working.</b>
+    <p>Not just a final number — every line: gross salary, the exemption, the threshold, each slab band, the rebate
+    and which of the three caps limited it. The working is the trust. A taxpayer who can follow the arithmetic
+    believes the result; one shown only a total does not.</p>
+  </li>
+  <li>
+    <small>Phase 5 · narration</small>
+    <b>Underneath the table, it explains itself in plain Bangla or English.</b>
+    <p>The model receives the finished breakdown as JSON and writes five sentences. It is forbidden from
+    introducing any figure not already in that JSON. If it does, that is a bug — and a checkable one.</p>
+  </li>
+  <li>
+    <small>Phase 4 · ask</small>
+    <b>Rahim wonders whether their festival bonus counts. They switch to the Ask tab.</b>
+    <p>Answer comes back with a citation — <code>salary-income.md</code> — which they can open and read. When they
+    ask something out of scope ("what's the corporate tax rate?"), the app refuses <em>without even calling the
+    model</em>, because retrieval scored too low. That refusal is a feature, not a gap.</p>
+  </li>
+  <li>
+    <small>Phase 7 · planning</small>
+    <b>They ask: would putting another 1,00,000 into DPS help?</b>
+    <p>The app clones the draft, changes one input, and runs the <em>same</em> calculator again. It shows the tax
+    delta beside the extra outlay — and if the 3%-of-income cap already binds, it says so plainly. No LLM does the
+    math. "Spend more to save tax" is never a recommendation.</p>
+  </li>
+  <li>
+    <small>Phase 6 · compare years</small>
+    <b>Out of curiosity they run the same numbers through AY 2025-26 and 2026-27 side by side.</b>
+    <p>The higher threshold looks like good news until the weaker rebate cap shows up — net effect is <em>more</em>
+    tax. That conclusion comes from a config diff and two calculator runs, not from anything a model "knows".</p>
+  </li>
+  <li>
+    <small>Phase 7 · filing coach</small>
+    <b>The app prints a checklist and Rahim files manually on the NBR portal.</b>
+    <p>Each confirmed value is mapped to the exact e-Return tab and field. Missing documents are listed. The app
+    never logs in, never automates, never submits — NBR stays the system of record.</p>
+  </li>
+  <li>
+    <small>Phase 1 · the loop closes</small>
+    <b>After submission, Rahim copies NBR's confirmed result into <code>private/returns/2026-27.json</code>.</b>
+    <p>That file becomes a permanent regression test. Next June, when the new Finance Act lands and the rules get
+    updated, <code>npm run eval</code> proves that this year's return still reproduces exactly. The user's own tax
+    history <em>is</em> the test suite.</p>
+  </li>
+</ol>
+
+<hr>
+
+<!-- ============================ PHASES ============================ -->
+<h2><span class="num">THE BUILD</span>Seven phases</h2>
+<p class="lede">Two thirds of the value is built before any AI appears. That is not a flaw in the plan — it is
+what production AI systems actually look like. Tutorials hide this ratio, which is why people who have done ten
+RAG tutorials still can't ship anything.</p>
+
+<pre>Phase 1  CALCULATOR          <span class="g">no AI</span>              <span class="c">← the gate: proves correctness</span>
+Phase 2  CORPUS              <span class="g">no AI</span>              <span class="c">← the data the AI will read</span>
+<span class="c">───────────────────────────────────────────────────────────────────────</span>
+Phase 3  INDEXING            embeddings only
+Phase 4  ASK TAB             retrieval + generation
+Phase 5  CALCULATE TAB       generation (narration only)
+Phase 6  POLISH              year selector, diffs, retrieval eval
+Phase 7  PERSONAL ASSISTANT  local filing coach + planning scenarios</pre>
+
+<!-- PHASE 1 -->
+<div class="phase gate" id="p1">
+  <h3><span class="no">PHASE 1</span> Calculator &amp; replay eval</h3>
+  <div class="meta">
+    <span class="pill done">eval passes</span>
+    <span class="pill noai">no AI</span>
+    <span class="pill">half a day</span>
+    <span class="pill" style="color:var(--green)">THE GATE</span>
+  </div>
+  <p class="goal">Compute tax deterministically, then prove it correct by reproducing a return you actually filed.
+  If the calculator can't reproduce a filed return, nothing built on top of it is worth anything.</p>
+  <div class="cols">
+    <div class="block">
+      <h4>User stories</h4>
+      <ul class="stories">
+        <li>As a taxpayer, I want to enter my salary and see my tax, <em>so that I can check the figure my employer or accountant gave me.</em></li>
+        <li>As a taxpayer, I want to see every step of the arithmetic, <em>so that I can believe the result instead of taking it on faith.</em></li>
+        <li>As the builder, I want to replay a return NBR already accepted, <em>so that I know my rule figures are right without owning a copy of the Finance Act.</em></li>
+        <li>As the builder, I want ambiguous rules to be config switches, <em>so that the eval settles them empirically instead of me guessing.</em></li>
+        <li>As the builder, I want a new tax year to be a new folder, <em>so that adding AY 2027-28 costs zero code changes.</em></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>What gets built</h4>
+      <ul class="builds">
+        <li><b>rules/ay-&lt;year&gt;/config.json</b> — thresholds, bands, rebate, minimum tax. Data, never code. Old years are never edited.</li>
+        <li><b>lib/calc/</b> — slabs, rebate (lowest-of-three + which cap bound), minimum tax, orchestration. Zero dependency on the AI layer.</li>
+        <li><b>eval/replay.ts</b> — asserts every line of a filed return within 1 taka; prints the full working on failure.</li>
+        <li><b>eval/calc-cli.ts</b> — <code>npm run calc -- 2025-26</code></li>
+        <li><b>private/returns/</b> — your real filed returns. Gitignored, never embedded, never sent anywhere.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="done"><b>Done when</b> <code>npm run eval</code> reproduces a filed return to the taka, and a failure
+  names the specific line that diverged — which localises the bug to a config figure, not a code hunt.</div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="phase" id="p2">
+  <h3><span class="no">PHASE 2</span> The corpus</h3>
+  <div class="meta">
+    <span class="pill done">complete</span>
+    <span class="pill noai">no AI</span>
+    <span class="pill">one afternoon</span>
+  </div>
+  <p class="goal">A small, clean, hand-curated body of markdown the Ask tab will retrieve from. About 12 files,
+  20–30 chunks. A small accurate corpus beats a large vague one — and Phase 6 lets you measure the difference.</p>
+  <div class="cols">
+    <div class="block">
+      <h4>User stories</h4>
+      <ul class="stories">
+        <li>As a taxpayer, I want plain-language explanations of the rules that apply to me, <em>so that I understand why I owe what I owe.</em></li>
+        <li>As a taxpayer, I want answers scoped to my assessment year, <em>so that a repealed slab never surfaces as current advice.</em></li>
+        <li>As a taxpayer, I want to be told when something is outside this tool's scope, <em>so that I go to a professional instead of trusting a wrong answer.</em></li>
+        <li>As the builder, I want process content written first, <em>so that I can test the whole pipeline before risking a single tax rate.</em></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>What gets built</h4>
+      <ul class="builds">
+        <li><b>rules/shared/corpus/</b> — year-independent process: registration, filing steps, payments, documents, source-tax verification, expenditure.</li>
+        <li><b>rules/ay-&lt;year&gt;/corpus/</b> — thresholds, slabs, rebate, salary income, house property, minimum tax, deadlines.</li>
+        <li><b>out-of-scope.md</b> — gives retrieval something <em>correct</em> to return for questions the tool can't answer.</li>
+        <li><b>scripts/lint-corpus.ts</b> — front-matter valid, headings present, sections 150–500 words.</li>
+      </ul>
+      <p style="font-size:13.5px;color:var(--faint);margin-top:12px">Authoring rules that decide retrieval quality:
+      one idea per <code>##</code> heading · make the heading a question someone would ask · repeat context inside
+      the chunk (it's retrieved alone) · numbers in prose are for explanation only — <code>config.json</code> always wins.</p>
+    </div>
+  </div>
+  <div class="done"><b>Done when</b> every file has valid front-matter, one idea per heading, and
+  <code>npm run lint:corpus</code> passes. PDF/OCR ingestion is explicitly out of scope — transcribe by hand.</div>
+</div>
+
+<!-- PHASE 3 -->
+<div class="phase" id="p3">
+  <h3><span class="no">PHASE 3</span> Indexing &amp; search</h3>
+  <div class="meta">
+    <span class="pill todo">not started</span>
+    <span class="pill ai">embeddings (local)</span>
+    <span class="pill">one evening</span>
+  </div>
+  <p class="goal">Turn the corpus into vectors in Postgres and search it from the terminal. Stop-and-stare phase:
+  read raw similarity scores before wrapping anything in a UI. This is where the mental model locks in permanently.</p>
+  <div class="cols">
+    <div class="block">
+      <h4>User stories</h4>
+      <ul class="stories">
+        <li>As a taxpayer, I want to ask in my own words and still find the right rule, <em>so that I don't have to know the official terminology.</em></li>
+        <li>As a taxpayer, I want my income figures to never leave my laptop, <em>so that a free-tier provider can't train on my finances.</em></li>
+        <li>As the builder, I want to see the raw scores in a terminal, <em>so that I learn what good and bad retrieval actually look like.</em></li>
+        <li>As the builder, I want to watch an unanswerable question still return five rows, <em>so that I understand why a score floor is non-negotiable.</em></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>What gets built</h4>
+      <ul class="builds">
+        <li><b>Postgres 17 + pgvector</b> (docker, port 5433) and <b>Ollama</b> running <code>nomic-embed-text</code>, 768 dims.</li>
+        <li><b>lib/rag/chunk.ts</b> — split on <code>##</code>, heading prepended to the body so it gets embedded too.</li>
+        <li><b>lib/rag/embed.ts</b> — Ollama speaks the OpenAI wire format, so one SDK serves both providers.</li>
+        <li><b>lib/rag/search.ts</b> — cosine search, year-filtered; shared chunks always included.</li>
+        <li><b>scripts/index-corpus.ts</b> · <b>scripts/search-cli.ts</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="done"><b>Done when</b> <code>npm run search "…"</code> returns a sensible top-5 with scores you believe,
+  year filtering works, and you have personally watched an out-of-scope question return five rows scoring ~0.4.
+  <em>Cosine search always returns something — there is no "no results".</em></div>
+</div>
+
+<!-- PHASE 4 -->
+<div class="phase" id="p4">
+  <h3><span class="no">PHASE 4</span> Ask tab — retrieval + generation</h3>
+  <div class="meta">
+    <span class="pill todo">not started</span>
+    <span class="pill ai">retrieval + generation</span>
+    <span class="pill">one evening</span>
+  </div>
+  <p class="goal">Answer rule questions from the corpus, with citations, and refuse what it doesn't know.
+  There is no magic here: the prompt is assembled text. The model didn't <em>know</em> the answer — you handed
+  it the paragraph and asked it to read.</p>
+  <div class="cols">
+    <div class="block">
+      <h4>User stories</h4>
+      <ul class="stories">
+        <li>As a taxpayer, I want to ask "is my festival bonus taxable?" and get a short answer, <em>so that I don't have to read a manual.</em></li>
+        <li>As a taxpayer, I want every answer to cite the file it came from, <em>so that I can verify it myself.</em></li>
+        <li>As a taxpayer, I want "how much do I owe?" to send me to the calculator, <em>so that a language model never estimates my tax.</em></li>
+        <li>As a taxpayer, I want out-of-scope questions refused outright, <em>so that I'm never handed a confident wrong answer.</em></li>
+        <li>As the builder, I want every question logged with its scores, <em>so that a week of logs tells me which corpus file to write next.</em></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>What gets built</h4>
+      <ul class="builds">
+        <li><b>Guard 1 — score floor.</b> If the best hit is under ~0.5, return a refusal and <em>never call the model at all.</em> Cheaper, faster, cannot hallucinate.</li>
+        <li><b>Guard 2 — prompt instruction.</b> "Answer using ONLY the context. If it isn't there, say you don't know." Use both guards; this is what separates a demo from something usable.</li>
+        <li><b>app/api/ask</b> — SSE streaming, citations sent first so sources render immediately.</li>
+        <li><b>A minimal UI</b> — question box, year selector, streamed answer, citations list. Always render the citations.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="done"><b>Done when</b> answers cite a source file, "how much do I owe" redirects to Calculate,
+  and out-of-scope questions are refused <em>without the model being called</em> — verified in the log.</div>
+</div>
+
+<!-- PHASE 5 -->
+<div class="phase" id="p5">
+  <h3><span class="no">PHASE 5</span> Calculate tab &amp; narration</h3>
+  <div class="meta">
+    <span class="pill todo">not started</span>
+    <span class="pill ai">narration only</span>
+    <span class="pill">a weekend</span>
+  </div>
+  <p class="goal">A form that computes tax, shows the working, and explains it in plain language. The model
+  receives finished numbers and writes sentences. A figure in the explanation that isn't in the breakdown is a bug.</p>
+  <div class="cols">
+    <div class="block">
+      <h4>User stories</h4>
+      <ul class="stories">
+        <li>As a taxpayer, I want a form laid out like the official e-Return, <em>so that it feels familiar and I can transcribe straight across.</em></li>
+        <li>As a taxpayer, I want the calculation explained in Bangla or English, <em>so that I actually understand it rather than just seeing a total.</em></li>
+        <li>As a taxpayer, I want to be told which rebate cap limited me, <em>so that I know whether investing more would help at all.</em></li>
+        <li>As a taxpayer, I want unsupported income types rejected with a clear message, <em>so that the app never quietly approximates my return.</em></li>
+        <li>As a taxpayer, I want to save a scenario and reload it, <em>so that this year's work becomes next year's starting point — and a test case.</em></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>What gets built</h4>
+      <ul class="builds">
+        <li><b>app/api/calculate</b> — validate → reject out-of-scope → <code>computeTax()</code>. Refusing is a feature.</li>
+        <li><b>app/api/explain</b> — sends the <code>Breakdown</code> object, never the raw form. It contains no identifiers; keep it that way.</li>
+        <li><b>BreakdownTable</b> — every line including per-band rows. Narration goes <em>below</em> the table, never instead of it.</li>
+        <li><b>Warnings + unverified banner + disclaimer</b> — non-negotiable UI elements.</li>
+        <li>Scenarios saved in the same shape the replay eval reads.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="done"><b>Done when</b> the narration contains no number absent from the breakdown, explains which
+  rebate cap bound, and no identifier reaches the hosted model. <br>
+  <em>The check that matters:</em> run identical inputs through both years and read the two explanations — if the
+  model correctly says 2026-27 raised the threshold but weakened the rebate, and the net effect is <em>higher</em>
+  tax, narration is working.</div>
+</div>
+
+<!-- PHASE 6 -->
+<div class="phase" id="p6">
+  <h3><span class="no">PHASE 6</span> Measurement, year tooling &amp; polish</h3>
+  <div class="meta">
+    <span class="pill todo">not started</span>
+    <span class="pill noai">tooling</span>
+    <span class="pill">a weekend</span>
+  </div>
+  <p class="goal">Make quality measurable and yearly updates routine. This is the phase most side projects skip,
+  and the reason most of them can't be improved after they're built. Without measurement, every change is a guess.</p>
+  <div class="cols">
+    <div class="block">
+      <h4>User stories</h4>
+      <ul class="stories">
+        <li>As a taxpayer, I want a "what changed this year" page, <em>so that I can see how the new Finance Act affects me.</em></li>
+        <li>As a taxpayer, I want the same inputs shown against two years side by side, <em>so that I can see the real net effect rather than a headline.</em></li>
+        <li>As a taxpayer, I want the interface in Bangla, <em>so that it's usable by the people who need it most.</em></li>
+        <li>As a taxpayer, I want to print the breakdown, <em>so that I can carry it to the e-Return form.</em></li>
+        <li>As the builder, I want a hit-rate number, <em>so that changing the chunker becomes engineering instead of vibes.</em></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>What gets built</h4>
+      <ul class="builds">
+        <li><b>eval/questions.json</b> — ~20 hand-written cases, <em>including refusal cases</em>. A system that answers everything is broken in a way hit rate alone won't reveal.</li>
+        <li><b>eval/retrieval.ts</b> — hit rate + refusal accuracy, wired into the same <code>npm run eval</code>.</li>
+        <li><b>scripts/config-diff.ts</b> — year-over-year figure diff; becomes the change summary page for free.</li>
+        <li><b>The yearly ritual</b> — ~2 hours, documented and rehearsed: copy folder, edit figures, re-index, re-eval, publish diff.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="done"><b>Done when</b> <code>npm run eval</code> reports both replay and retrieval hit rate, refusal
+  cases pass, and both assessment years still replay. <b>Old years are never edited</b> — that rule is what keeps
+  the eval meaningful.</div>
+</div>
+
+<!-- PHASE 7 -->
+<div class="phase" id="p7">
+  <h3><span class="no">PHASE 7</span> Personal assistant &amp; finance record</h3>
+  <div class="meta">
+    <span class="pill todo">not started</span>
+    <span class="pill ai">explanation only</span>
+    <span class="pill">a weekend</span>
+  </div>
+  <p class="goal">Turn the calculator, corpus, and e-Return field map into a local filing workspace: collect
+  evidence, prepare a draft, run rule-backed planning scenarios, guide manual submission. <b>It does not submit a
+  return.</b> NBR remains the filing system, and its completed return remains the oracle for <code>npm run eval</code>.</p>
+  <div class="cols">
+    <div class="block">
+      <h4>User stories</h4>
+      <ul class="stories">
+        <li>As a taxpayer, I want to build my return over several sittings, <em>so that I'm not re-typing figures each time I sit down.</em></li>
+        <li>As a taxpayer, I want a checklist of missing documents and fields, <em>so that I don't get stuck halfway through the portal.</em></li>
+        <li>As a taxpayer, I want to know exactly which e-Return tab each value belongs in, <em>so that manual entry is mechanical, not stressful.</em></li>
+        <li>As a taxpayer, I want to test "what if I put more into DPS?", <em>so that I can plan before the year ends rather than discover it after.</em></li>
+        <li>As a taxpayer, I want lifestyle expenditure kept separate from deductions, <em>so that I never mistake wealth reconciliation for a tax break.</em></li>
+        <li>As a taxpayer, I want my identifiers to never reach a prompt, a database, or version control, <em>so that using this tool carries no privacy cost.</em></li>
+        <li>As the builder, I want the filed result transcribed by hand only, <em>so that the eval can never be "made to pass" by the app's own guess.</em></li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>What gets built</h4>
+      <ul class="builds">
+        <li><b>private/ay-&lt;year&gt;/return-draft.json</b> — confirmed inputs + evidence filenames. Deliberately has <em>no</em> <code>filed_result</code>.</li>
+        <li><b>Confirm-before-use intake</b> — the model may extract candidate values, but each must be labelled with its source and confirmed before reaching <code>TaxInputs</code>.</li>
+        <li><b>Planning scenarios</b> — cloned inputs through the <em>same</em> <code>computeTax()</code>. Never an LLM for math. Base draft is immutable.</li>
+        <li><b>Filing coach</b> — per-year checklist built from the portal field map: missing facts, required evidence, exact tab/field, source-tax items needing portal verification.</li>
+        <li><b>private/returns/&lt;year&gt;.json</b> — after filing, transcribed from NBR. Closes the loop back to Phase 1.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="done"><b>The hard boundaries.</b> The assistant must not: invent any value · write a
+  <code>filed_result</code> from its own calculation · claim a benefit without a cited rule <em>and</em> a
+  user-supplied amount · log into or automate the NBR portal · treat lifestyle expenditure as a deduction ·
+  recommend spending more to save tax. Local only — any future sync needs its own threat model first.</div>
+</div>
+
+<hr>
+
+<!-- ============================ ORDER ============================ -->
+<h2 id="order"><span class="num">RATIONALE</span>Why the phases are in this order</h2>
+<table>
+  <tr><th style="width:180px">Ordering rule</th><th>Reason</th></tr>
+  <tr><td>Phase 1 first, always</td><td>It's the gate. Pure logic, fully testable, no model uncertainty — and it settles the unverified rule figures empirically. A research problem becomes a test.</td></tr>
+  <tr><td>Phase 2 before Phase 3</td><td>Indexing bad content teaches you nothing about retrieval. Curate first, so when retrieval is poor you know it's the retrieval, not the data.</td></tr>
+  <tr><td>Phase 3 before Phase 4</td><td>Stare at raw similarity scores in a terminal before wrapping them in a UI. That's where the mental model locks in permanently.</td></tr>
+  <tr><td>Phase 5 after Phase 4</td><td>Narration is the easiest AI step — it receives finished numbers and writes sentences. Do the hard retrieval work first.</td></tr>
+  <tr><td>Phase 6 before Phase 7</td><td>Measurement has to exist before you build the workflow people will actually depend on.</td></tr>
+</table>
+
+<h3>What each phase teaches</h3>
+<table>
+  <tr><th style="width:180px">Phase</th><th>Lesson</th></tr>
+  <tr><td>3</td><td>What an embedding is, and why chunking is the highest-leverage decision in RAG</td></tr>
+  <tr><td>4</td><td>That RAG is just pasting text into a prompt — and that the <em>guards</em> matter more than the model</td></tr>
+  <tr><td>6</td><td>That measurable retrieval turns tuning into engineering instead of vibes</td></tr>
+  <tr><td>1, 2, 5</td><td>The unglamorous 80%: data discipline, versioning, and keeping the model away from anything that must be correct</td></tr>
+</table>
+
+<hr>
+
+<!-- ============================ SCOPE ============================ -->
+<h2 id="scope"><span class="num">BOUNDARIES</span>Scope, v1</h2>
+<div class="scope">
+  <div class="in">
+    <h4>In scope</h4>
+    <ul>
+      <li>Resident individual taxpayers</li>
+      <li>Salary income</li>
+      <li>House property income (net)</li>
+      <li>Bank interest</li>
+      <li>Investment rebate</li>
+      <li>Minimum tax</li>
+      <li>Lifestyle expenditure &amp; wealth reconciliation</li>
+    </ul>
+  </div>
+  <div class="out">
+    <h4>Out of scope — the app says so and stops</h4>
+    <ul>
+      <li>Business / professional income</li>
+      <li>Capital gains · foreign income · agricultural income</li>
+      <li>Non-resident taxpayers</li>
+      <li>Surcharge on net worth · company tax</li>
+      <li>Actual e-Return submission</li>
+      <li>Auth / multi-user / hosted deployment</li>
+      <li>PDF &amp; OCR ingestion · bank syncing · portfolio advice</li>
+    </ul>
+  </div>
+</div>
+<div class="callout"><b>Refusing is a feature.</b> Out-of-scope inputs should make the app stop, not guess.
+An assistant that answers everything is broken in a way no accuracy metric will show you.</div>
+
+<hr>
+
+<!-- ============================ GLOSSARY ============================ -->
+<h2 id="glossary"><span class="num">REFERENCE</span>Terms used above</h2>
+<table>
+  <tr><th style="width:210px">Term</th><th>Meaning in this project</th></tr>
+  <tr><td>Assessment year (AY)</td><td>The tax year the return belongs to, e.g. 2025-26. Each gets its own folder of rules and corpus. Old years are never edited.</td></tr>
+  <tr><td>Replay eval</td><td><code>npm run eval</code> — feeds a return you really filed through the calculator and asserts every line within 1 taka. Empirical proof the rule figures are right.</td></tr>
+  <tr><td>Corpus</td><td>Hand-written markdown explaining the rules and the filing process. What the AI reads. It never supplies numbers to the calculator.</td></tr>
+  <tr><td>Chunk</td><td>One <code>##</code> section of a corpus file, embedded on its own. Retrieved alone, without the file around it — so it must repeat its own context.</td></tr>
+  <tr><td>Embedding</td><td>A list of ~768 numbers representing meaning. Two texts about the same thing land near each other even with no words in common.</td></tr>
+  <tr><td>Cosine search</td><td>Finds the chunks nearest the question in that number-space. It <em>always</em> returns rows — there is no "no results".</td></tr>
+  <tr><td>Score floor</td><td>If the best match is below ~0.5, refuse without calling the model. The single most important guard in the system.</td></tr>
+  <tr><td>RAG</td><td>Retrieval-augmented generation. It does not teach the model your documents — it pastes relevant text into the question.</td></tr>
+  <tr><td>Breakdown</td><td>The labelled, line-by-line output of <code>computeTax()</code>. The only source of numbers the LLM is ever allowed to narrate.</td></tr>
+  <tr><td><code>rebate_binding</code></td><td>Which of the three rebate caps actually limited you — income, investment, or the absolute ceiling. Turns a number into actionable advice with no model reasoning involved.</td></tr>
+  <tr><td><code>filed_result</code></td><td>NBR's confirmed result, transcribed by hand after filing. Evidence for the eval — never a prediction, never written by the app.</td></tr>
+  <tr><td><code>private/</code></td><td>Gitignored. Your returns and drafts. Never committed, never embedded, never sent to a hosted model.</td></tr>
+</table>
+
+<footer>
+  BD Tax Assistant — generated project guide. Source of truth: <code>docs/phases/00-overview.md</code> through
+  <code>07-personal-assistant.md</code>, plus <code>README.md</code>. Regenerate when the phase docs change.<br>
+  Guidance only. This tool does not file anything; verify against the official e-Return form.
+</footer>
+
+</div>
+</body>
+</html>

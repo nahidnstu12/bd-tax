@@ -8,6 +8,8 @@
     "eval": "tsx eval/replay.ts",
     "calc": "tsx eval/calc-cli.ts",
     "lint:corpus": "tsx scripts/lint-corpus.ts",
+    "embed:peek": "tsx scripts/embed-peek.ts",
+    "sim:lab": "tsx scripts/similarity-lab.ts",
     "db:up": "docker compose up -d",
     "db:schema": "docker compose exec -T db psql -U postgres -d ragdb < db/schema.sql"
   },
@@ -15,5 +17,8 @@
     "@types/node": "^22.10.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "openai": "^7.4.0"
   }
 }

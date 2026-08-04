@@ -6,6 +6,7 @@ Start here.
 
 | Doc | What it covers |
 |---|---|
+| [`project-guide.html`](project-guide.html) | **Start here if the outcome isn't clear** — what the finished product is, an end-to-end user journey, and all 7 phases with user stories (open in a browser) |
 | [`planning-and-architecture.md`](planning-and-architecture.md) | The mental model, scope, data model, architecture, privacy, risks |
 | [`setup-guide.md`](setup-guide.md) | **Install and run it anywhere** — prerequisites, env, first run, yearly ritual, troubleshooting |
 | [`verification-findings.md`](verification-findings.md) | **What real evidence proved and refuted** (2026-07-30) — salary ⅓ exempt (F1), flat min tax policy (F2), per-AY alignment §2.1 |
