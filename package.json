@@ -8,18 +8,23 @@
     "eval": "tsx eval/replay.ts",
     "calc": "tsx eval/calc-cli.ts",
     "lint:corpus": "tsx scripts/lint-corpus.ts",
-    "embed:peek": "tsx scripts/embed-peek.ts",
-    "sim:lab": "tsx scripts/similarity-lab.ts",
+    "embed:peek": "tsx --env-file-if-exists=.env.local scripts/embed-peek.ts",
+    "sim:lab": "tsx --env-file-if-exists=.env.local scripts/similarity-lab.ts",
     "chunk:peek": "tsx scripts/chunk-peek.ts",
+    "index": "tsx --env-file-if-exists=.env.local scripts/index-corpus.ts",
+    "search": "tsx --env-file-if-exists=.env.local scripts/search-cli.ts",
     "db:up": "docker compose up -d",
-    "db:schema": "docker compose exec -T db psql -U postgres -d ragdb < db/schema.sql"
+    "db:schema": "tsx --env-file-if-exists=.env.local scripts/db-schema.ts",
+    "db:check": "tsx --env-file-if-exists=.env.local scripts/db-check.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@types/pg": "^8.20.3",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
   },
   "dependencies": {
-    "openai": "^7.4.0"
+    "openai": "^7.4.0",
+    "pg": "^8.22.0"
   }
 }
