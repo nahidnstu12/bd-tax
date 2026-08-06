@@ -10,17 +10,19 @@
  * Anticlimactic on purpose. All the ideas were in steps 1-3; this is a loop
  * with an INSERT in it.
  */
-import { chunkCorpus } from '../lib/rag/chunk';
+import { chunkCorpus, currentStrategy } from '../lib/rag/chunk';
 import { embed, MODEL } from '../lib/rag/embed';
 import { pool, toVector } from '../lib/rag/db';
 
-const chunks = chunkCorpus();
+// Override with e.g. CHUNK_STRATEGY=sentence npm run index — see npm run ablate.
+const strategy = currentStrategy();
+const chunks = chunkCorpus(strategy);
 if (chunks.length === 0) {
   console.error('  No chunks found. Is rules/*/corpus/ populated?');
   process.exit(1);
 }
 
-console.log(`\n  ${chunks.length} chunks to index  ·  model ${MODEL}\n`);
+console.log(`\n  ${chunks.length} chunks to index  ·  model ${MODEL}  ·  strategy ${strategy}\n`);
 
 /**
  * FULL REBUILD, every time.

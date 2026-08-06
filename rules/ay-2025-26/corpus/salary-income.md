@@ -4,12 +4,35 @@ topic: salary-income
 source: "Filed return E1 + NBR e-Return employment tab; 6th Schedule Part 1 (⅓ rule)"
 ---
 
+<!--
+  "What counts as salary income" was originally one section covering three
+  separate things: what is included, multiple employers, and which figures to
+  copy off the salary certificate. That made one embedding vector averaged
+  across all three, and "is my festival bonus taxable?" could only reach it at
+  rank 5 — the ablation confirmed it. Split, not reworded: no rule changed.
+-->
+
 ## What counts as salary income on e-Return?
 
-Employment income includes basic salary, allowances, festival bonus, and non-cash benefits
-you enter under **Income from Employment**. Multiple employers in one year use **Add
-Employment**; the portal can show an employment summary. Enter **annual totals** from the
-employer salary certificate.
+Employment income includes basic salary, allowances, **festival bonus**, and non-cash
+benefits. All of it goes under **Income from Employment** on the portal and forms gross
+salary before any exemption is applied. A festival bonus is ordinary salary income here —
+the calculator applies only the one-third salary exemption below, and models no separate
+exemption for bonus.
+
+## What if I had more than one employer this year?
+
+Multiple employers in one income year use **Add Employment** on the portal, entering each
+employer as its own row; the portal can then show a combined employment summary across all
+of them. The calculator takes a single gross salary figure, so add the employers together
+before entering it.
+
+## Which figures do I take from the salary certificate?
+
+Enter **annual totals** from the employer salary certificate, not monthly amounts. The
+salary certificate is the document your employer issues covering the whole income year,
+and its yearly totals are what both the portal and this calculator expect under Income
+from Employment.
 
 ## How is salary exemption calculated for Assessment Year 2025-26?
 

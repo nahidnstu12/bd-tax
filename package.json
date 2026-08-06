@@ -13,6 +13,7 @@
     "chunk:peek": "tsx scripts/chunk-peek.ts",
     "index": "tsx --env-file-if-exists=.env.local scripts/index-corpus.ts",
     "search": "tsx --env-file-if-exists=.env.local scripts/search-cli.ts",
+    "ablate": "tsx --env-file-if-exists=.env.local scripts/ablate.ts",
     "db:up": "docker compose up -d",
     "db:schema": "tsx --env-file-if-exists=.env.local scripts/db-schema.ts",
     "db:check": "tsx --env-file-if-exists=.env.local scripts/db-check.ts"
