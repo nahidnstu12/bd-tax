@@ -17,6 +17,7 @@ Start here.
 |---|---|
 | [`learn/00-index.md`](learn/00-index.md) | **8-part course on how retrieval actually works** — embeddings, cosine similarity, chunking, pgvector/HNSW, refusal, and how to measure any of it. Every example uses real numbers from this project's own runs |
 | [`phase-3-search-tests.md`](phase-3-search-tests.md) | The 30-question search test sheet, filled in, with the findings from the first full pass |
+| [`phase-4-steps.md`](phase-4-steps.md) | **The learning route through Phase 4** — FreeLLMAPI setup, then 7 steps from "watch the model lie" to a measured Ask pipeline |
 
 Phase 1 **eval gate passed**. Phase 2 corpus lives under `rules/shared/corpus/` and `rules/ay-*/corpus/` — run `npm run lint:corpus`.
 
